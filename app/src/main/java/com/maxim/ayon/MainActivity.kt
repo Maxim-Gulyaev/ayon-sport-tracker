@@ -5,6 +5,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.maxim.ayon.root_navigation.RootNavigation
 import com.maxim.ui.theme.AyonTheme
 
@@ -15,9 +16,14 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
+        val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
 
-        mainViewModel.accept(InternalIntent.SetAppLanguageObserver)
+        splashScreen.setKeepOnScreenCondition {
+            !mainViewModel.isAppReady.value
+        }
+
+        mainViewModel.accept(InternalIntent.SetInitialAppState)
 
         enableEdgeToEdge()
         setContent {

@@ -72,6 +72,9 @@ dependencies {
     // Datastore
     implementation(libs.androidx.datastore)
 
+    // SplashScreen
+    implementation(libs.androidx.core.splashscreen)
+
     // Modules
     implementation(project(":core:ui"))
     implementation(project(":core:navigation"))

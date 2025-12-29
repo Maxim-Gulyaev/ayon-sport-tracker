@@ -1,27 +1,39 @@
 package com.maxim.ayon
 
-import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.maxim.common.result.Result
-import com.maxim.common.result.asResult
 import com.maxim.domain.use_case.get_app_language.GetAppLanguageUseCase
+import com.maxim.domain.use_case.get_dark_theme_config.GetDarkThemeConfigUseCase
+import com.maxim.model.DarkThemeConfig
 import com.maxim.settings.model.AppLanguageUi
 import com.maxim.settings.model.toUi
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class MainViewModel @Inject constructor(
     private val getAppLanguageUseCase: GetAppLanguageUseCase,
+    private val getDarkThemeConfigUseCase: GetDarkThemeConfigUseCase,
 ): ViewModel() {
+
+    private val _isAppReady = MutableStateFlow(false)
+    val isAppReady = _isAppReady.asStateFlow()
 
     fun accept(intent: InternalIntent) {
         when (intent) {
-            InternalIntent.SetAppLanguageObserver -> {
+            InternalIntent.SetInitialAppState -> {
                 viewModelScope.launch {
-                    setAppLanguageObserver()
+                    initAppState()
+                    _isAppReady.update { true }
+                    observeAppState()
                 }
             }
         }
@@ -36,21 +48,51 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    private suspend fun setAppLanguageObserver() {
-        getAppLanguageUseCase()
-            .asResult()
-            .collect { result ->
-                when (result) {
-                    is Result.Success -> {
-                        val language = result.data.toUi()
-                        setAppLanguage(language)
-                    }
+    private fun setDarkThemeConfig(config: DarkThemeConfig) {
+        val nightMode = when (config) {
+            DarkThemeConfig.DARK -> AppCompatDelegate.MODE_NIGHT_YES
+            DarkThemeConfig.LIGHT -> AppCompatDelegate.MODE_NIGHT_NO
+            DarkThemeConfig.SYSTEM -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+        }
+        AppCompatDelegate.setDefaultNightMode(nightMode)
+    }
 
-                    is Result.Error -> {
-                        Log.e("ayon_error", "mainViewModel ${result.exception}")
-                    }
+    private fun observeAppState() {
+        observeLanguageChanges()
+        observeThemeChanges()
+    }
 
-                    else -> {}
+    private suspend fun initAppState() = coroutineScope {
+        val languageJob = async {
+            val language = getAppLanguageUseCase().first().toUi()
+            setAppLanguage(language)
+        }
+
+        val themeJob = async {
+            val theme = getDarkThemeConfigUseCase().first()
+            setDarkThemeConfig(theme)
+        }
+
+        languageJob.await()
+        themeJob.await()
+    }
+
+    private fun observeThemeChanges() {
+        viewModelScope.launch {
+            getDarkThemeConfigUseCase()
+                .distinctUntilChanged()
+                .collect { theme ->
+                    setDarkThemeConfig(theme)
+                }
+        }
+    }
+
+    private fun observeLanguageChanges() {
+        viewModelScope.launch {
+            getAppLanguageUseCase()
+                .distinctUntilChanged()
+                .collect { language ->
+                    setAppLanguage(language.toUi())
                 }
         }
     }
@@ -58,5 +100,5 @@ class MainViewModel @Inject constructor(
 
 sealed interface InternalIntent {
 
-    data object SetAppLanguageObserver : InternalIntent
+    data object SetInitialAppState : InternalIntent
 }
