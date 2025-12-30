@@ -12,6 +12,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import com.maxim.model.DarkThemeConfig
 
 private val lightScheme = lightColorScheme(
     primary = primaryLight,
@@ -255,9 +256,15 @@ val unspecified_scheme = ColorFamily(
 
 @Composable
 fun AyonTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
+    themeConfig: DarkThemeConfig = DarkThemeConfig.SYSTEM,
     content: @Composable () -> Unit
 ) {
+    val darkTheme = when (themeConfig) {
+        DarkThemeConfig.DARK -> true
+        DarkThemeConfig.LIGHT -> false
+        DarkThemeConfig.SYSTEM -> isSystemInDarkTheme()
+    }
+
     val customColorScheme =
         if (darkTheme) OnDarkCustomColorScheme
         else OnLightCustomColorScheme

@@ -73,4 +73,5 @@ dependencies {
     implementation(project(":core:navigation"))
     implementation(project(":core:domain"))
     implementation(project(":core:testing"))
+    implementation(project(":core:model"))
 }

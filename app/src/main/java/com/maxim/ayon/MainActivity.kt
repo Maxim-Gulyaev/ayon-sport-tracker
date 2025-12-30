@@ -6,6 +6,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.maxim.ayon.root_navigation.RootNavigation
 import com.maxim.ui.theme.AyonTheme
 
@@ -20,12 +21,14 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         splashScreen.setKeepOnScreenCondition {
-            !mainViewModel.isAppReady.value
+            mainViewModel.isAppReady()
         }
 
         enableEdgeToEdge()
         setContent {
-            AyonTheme {
+            AyonTheme(
+                themeConfig = mainViewModel.theme.collectAsStateWithLifecycle().value
+            ) {
                 RootNavigation(appComponent)
             }
         }
