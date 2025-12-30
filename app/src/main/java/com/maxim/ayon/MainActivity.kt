@@ -23,8 +23,6 @@ class MainActivity : AppCompatActivity() {
             !mainViewModel.isAppReady.value
         }
 
-        mainViewModel.accept(InternalIntent.SetInitialAppState)
-
         enableEdgeToEdge()
         setContent {
             AyonTheme {

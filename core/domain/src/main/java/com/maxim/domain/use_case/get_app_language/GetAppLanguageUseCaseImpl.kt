@@ -9,5 +9,5 @@ class GetAppLanguageUseCaseImpl @Inject constructor(
     private val settingsRepository: SettingsRepository,
 ) : GetAppLanguageUseCase {
 
-    override suspend operator fun invoke(): Flow<AppLanguage> = settingsRepository.getAppLanguage()
+    override operator fun invoke(): Flow<AppLanguage> = settingsRepository.getAppLanguage()
 }
