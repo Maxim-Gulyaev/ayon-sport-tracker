@@ -27,13 +27,9 @@ class DarkThemeViewModel @Inject constructor(
             initialValue = DarkThemeUiState()
         )
 
-    fun accept(intent: DarkThemeScreenIntent) {
-        when (intent) {
-            is DarkThemeScreenIntent.OnOptionClicked -> {
-                viewModelScope.launch {
-                    setDarkThemeConfigUseCase(intent.config)
-                }
-            }
+    fun onOptionClicked(config: DarkThemeConfig) {
+        viewModelScope.launch {
+            setDarkThemeConfigUseCase(config)
         }
     }
 

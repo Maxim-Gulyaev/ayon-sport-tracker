@@ -31,9 +31,7 @@ fun DarkThemeScreen(
             DarkThemeScreenContent(
                 uiState = uiState,
                 onBackClick = onBackClick,
-                opOptionClick = { config ->
-                    viewModel.accept(DarkThemeScreenIntent.OnOptionClicked(config))
-                },
+                opOptionClick = { config -> viewModel.onOptionClicked(config) },
             )
         }
 

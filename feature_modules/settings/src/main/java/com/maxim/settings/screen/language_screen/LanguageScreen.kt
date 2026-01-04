@@ -37,7 +37,7 @@ fun LanguageScreen(
         LanguageScreenState.Loaded -> {
             LanguageScreenContent(
                 uiState = uiState,
-                onLanguageItemClick = { viewModel.onLanguageClick(it) },
+                onLanguageItemClick = { lang -> viewModel.onLanguageClick(lang) },
                 onBackClick = onBackClick,
             )
         }
