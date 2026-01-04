@@ -34,13 +34,9 @@ class LanguageViewModel @Inject constructor(
         }
     }
 
-    fun accept(intent: LanguageScreenIntent) {
-        when (intent) {
-            is LanguageScreenIntent.OnLanguageClick -> {
-                viewModelScope.launch {
-                    setAppLanguageUseCase(intent.language.toDomain())
-                }
-            }
+    fun onLanguageClick(language: AppLanguageUi) {
+        viewModelScope.launch {
+            setAppLanguageUseCase(language.toDomain())
         }
     }
 

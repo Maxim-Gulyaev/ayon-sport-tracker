@@ -19,7 +19,6 @@ import com.maxim.settings.R
 import com.maxim.settings.model.AppLanguageUi
 import com.maxim.settings.screen.component.SettingsCheckableItem
 import com.maxim.settings.screen.component.SettingsTopAppBar
-import com.maxim.settings.screen.language_screen.LanguageScreenIntent.OnLanguageClick
 import com.maxim.settings.utils.displayLangNameRes
 import com.maxim.ui.component.AyonVerticalSpacer
 import com.maxim.ui.theme.AyonTheme
@@ -38,7 +37,7 @@ fun LanguageScreen(
         LanguageScreenState.Loaded -> {
             LanguageScreenContent(
                 uiState = uiState,
-                onLanguageItemClick = { viewModel.accept(OnLanguageClick(it)) },
+                onLanguageItemClick = { viewModel.onLanguageClick(it) },
                 onBackClick = onBackClick,
             )
         }
