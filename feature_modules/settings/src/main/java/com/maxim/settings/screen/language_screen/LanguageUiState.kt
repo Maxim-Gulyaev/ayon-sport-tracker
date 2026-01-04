@@ -6,8 +6,7 @@ import kotlinx.collections.immutable.ImmutableList
 
 data class LanguageUiState(
     val appLanguages: ImmutableList<AppLanguageUi> = appLanguages(),
-    val currentAppLanguage: AppLanguageUi = AppLanguageUi.SYSTEM,
-    val selectedLanguage: AppLanguageUi = AppLanguageUi.SYSTEM,
+    val appLanguage: AppLanguageUi = AppLanguageUi.SYSTEM,
     val screenState: LanguageScreenState = LanguageScreenState.Loading,
 )
 

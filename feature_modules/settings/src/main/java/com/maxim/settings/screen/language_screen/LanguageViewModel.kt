@@ -39,12 +39,10 @@ class LanguageViewModel @Inject constructor(
     private suspend fun observeAppLanguage() {
         getAppLanguageUseCase()
             .distinctUntilChanged()
-            .collect { data ->
-                val languageUi = data.toUi()
+            .collect { lang ->
                 _uiState.update {
                     it.copy(
-                        currentAppLanguage = languageUi,
-                        selectedLanguage = languageUi,
+                        appLanguage = lang.toUi(),
                         screenState = LanguageScreenState.Loaded,
                     )
                 }

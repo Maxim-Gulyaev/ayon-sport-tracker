@@ -33,9 +33,9 @@ class DarkThemeViewModel @Inject constructor(
     private fun uiState() =
         getDarkThemeConfigUseCase()
             .distinctUntilChanged()
-            .map { data ->
+            .map { config ->
                 DarkThemeUiState(
-                    currentConfig = data,
+                    currentConfig = config,
                     loadingStatus = DarkThemeLoadingStatus.Loaded,
                 )
             }
