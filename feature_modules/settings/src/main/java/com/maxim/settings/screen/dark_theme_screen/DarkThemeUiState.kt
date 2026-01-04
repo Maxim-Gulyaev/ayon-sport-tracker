@@ -9,7 +9,7 @@ import kotlinx.collections.immutable.ImmutableList
 data class DarkThemeUiState(
     val configs: ImmutableList<DarkThemeConfig> = darkThemeConfigs(),
     val currentConfig: DarkThemeConfig = DarkThemeConfig.SYSTEM,
-    val loadingStatus: DarkThemeLoadingStatus = DarkThemeLoadingStatus.Loaded,
+    val loadingStatus: DarkThemeLoadingStatus = DarkThemeLoadingStatus.Loading,
 )
 
 sealed interface DarkThemeLoadingStatus {
