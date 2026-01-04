@@ -43,16 +43,6 @@ class LanguageViewModelTest {
     }
 
     @Test
-    fun `OnLanguageClick updates selectedLanguage correctly`() {
-        viewModel = LanguageViewModel(getAppLanguageUseCase, setAppLanguageUseCase, NoopLog)
-        val newLanguage = AppLanguageUi.SPANISH
-
-        viewModel.accept(LanguageScreenIntent.OnLanguageClick(newLanguage))
-
-        assertEquals(newLanguage, viewModel.uiState.value.selectedLanguage)
-    }
-
-    @Test
     fun `OnSaveButtonClick updates currentAppLanguage correctly`() = runTest {
         val fakeDataStoreFlow = MutableStateFlow(AppLanguage.SYSTEM)
         val selectedLang = AppLanguageUi.SPANISH
@@ -63,8 +53,7 @@ class LanguageViewModelTest {
         viewModel = LanguageViewModel(getAppLanguageUseCase, setAppLanguageUseCase, NoopLog)
 
         advanceUntilIdle()
-        viewModel.accept(LanguageScreenIntent.OnLanguageClick(selectedLang))
-        viewModel.accept(LanguageScreenIntent.OnSaveButtonClick)
+        viewModel.onLanguageClick(selectedLang)
         advanceUntilIdle()
 
         assertEquals(selectedLang, viewModel.uiState.value.currentAppLanguage)
