@@ -5,7 +5,7 @@ import androidx.datastore.core.DataStore
 import androidx.lifecycle.ViewModelProvider
 import com.maxim.common.di.module.DispatcherModule
 import com.maxim.common.di.module.LogModule
-import com.maxim.common.util.Logger
+import com.maxim.common.util.AyonLogger
 import com.maxim.data.di.DataModule
 import com.maxim.database.di.DatabaseModule
 import com.maxim.database.di.LocalDataSourceModule
@@ -62,7 +62,7 @@ interface AppComponent :
 
     override fun getAllJogsUseCase(): GetAllJogsUseCase
 
-    override fun logger(): Logger
+    override fun logger(): AyonLogger
 
     @Component.Builder
     interface Builder {

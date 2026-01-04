@@ -1,7 +1,7 @@
 package com.maxim.settings.di.utils
 
 import androidx.datastore.core.DataStore
-import com.maxim.common.util.Logger
+import com.maxim.common.util.AyonLogger
 import com.maxim.datastore.UserPreferencesDataSource
 import com.maxim.datastore.data.UserPreferences
 import com.maxim.domain.repository.SettingsRepository
@@ -18,5 +18,5 @@ interface SettingsDependencies {
     fun setAppLanguageUseCase(): SetAppLanguageUseCase
     fun getDarkThemeConfigUseCase(): GetDarkThemeConfigUseCase
     fun setDarkThemeConfigUseCase(): SetDarkThemeConfigUseCase
-    fun logger(): Logger
+    fun logger(): AyonLogger
 }
