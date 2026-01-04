@@ -12,6 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.maxim.ui.component.AyonHorizontalSpacer
 import com.maxim.ui.theme.AyonTypography
 import com.maxim.ui.util.NoRippleInteractionSource
 
@@ -33,15 +34,17 @@ internal fun SettingsCheckableItem(
                 onClick = onClick,
             )
     ) {
+        RadioButton(
+            selected = isSelected,
+            onClick = null,
+        )
+
+        AyonHorizontalSpacer(12.dp)
+
         Text(
             modifier = Modifier.weight(1f),
             text = stringResource(displayNameRes),
             style = AyonTypography.bodyLarge,
-        )
-        RadioButton(
-            selected = isSelected,
-            onClick = null,
-            enabled = false,
         )
     }
 }
