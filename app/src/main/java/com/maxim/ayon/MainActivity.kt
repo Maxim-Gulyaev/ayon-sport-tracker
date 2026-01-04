@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         splashScreen.setKeepOnScreenCondition {
-            mainViewModel.isAppReady()
+            mainViewModel.shouldKeepSplashscreen()
         }
 
         lifecycleScope.launch {

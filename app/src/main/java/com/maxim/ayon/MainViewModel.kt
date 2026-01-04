@@ -24,7 +24,7 @@ class MainViewModel @Inject constructor(
     private val getDarkThemeConfigUseCase: GetDarkThemeConfigUseCase,
 ): ViewModel() {
 
-    private val _isAppReady = MutableStateFlow(false)
+    private val _shouldKeepSplashscreen = MutableStateFlow(true)
 
     private val _theme = MutableStateFlow(DarkThemeConfig.SYSTEM)
     val theme = _theme.asStateFlow()
@@ -36,7 +36,7 @@ class MainViewModel @Inject constructor(
         )
     }
 
-    fun isAppReady(): Boolean = _isAppReady.value
+    fun shouldKeepSplashscreen(): Boolean = _shouldKeepSplashscreen.value
 
     private fun observeAppState(
         languageFlow: Flow<AppLanguage>,
@@ -60,7 +60,7 @@ class MainViewModel @Inject constructor(
     ) {
         setAppLanguage(language)
         _theme.update { theme }
-        _isAppReady.value = true
+        _shouldKeepSplashscreen.value = false
     }
 
     private fun setAppLanguage(language: AppLanguageUi) {
