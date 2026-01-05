@@ -1,15 +1,23 @@
 package com.maxim.settings.screen.language_screen
 
+import app.cash.turbine.test
 import com.maxim.domain.use_case.get_app_language.GetAppLanguageUseCase
 import com.maxim.domain.use_case.set_app_language.SetAppLanguageUseCase
 import com.maxim.model.AppLanguage
 import com.maxim.settings.model.AppLanguageUi
+import com.maxim.settings.model.toDomain
+import com.maxim.settings.model.toUi
 import com.maxim.testing.rules.MainDispatcherRule
+import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
+import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
@@ -34,41 +42,89 @@ class LanguageViewModelTest {
     }
 
     @Test
-    fun `screenState should be Loading when viewModel starts`() {
-        viewModel = LanguageViewModel(getAppLanguageUseCase, setAppLanguageUseCase)
-        assertEquals(LanguageScreenState.Loading, viewModel.uiState.value.screenState)
-    }
+    fun `uiState emits Loading initially`() = runTest {
+        every { getAppLanguageUseCase() } returns emptyFlow()
 
-    @Test
-    fun `onOptionClicked updates currentAppLanguage correctly`() = runTest {
-        val fakeDataStoreFlow = MutableStateFlow(AppLanguage.SYSTEM)
-        val selectedLang = AppLanguageUi.SPANISH
-        coEvery { getAppLanguageUseCase() } returns fakeDataStoreFlow
-        coEvery { setAppLanguageUseCase(any()) } coAnswers {
-            fakeDataStoreFlow.emit(firstArg())
+        viewModel = LanguageViewModel(
+            getAppLanguageUseCase,
+            setAppLanguageUseCase
+        )
+
+        viewModel.uiState.test {
+            val initial = awaitItem()
+
+            assertEquals(LanguageScreenState.Loading, initial.screenState)
+            assertEquals(AppLanguageUi.SYSTEM, initial.appLanguage)
+
+            expectNoEvents()
         }
-        viewModel = LanguageViewModel(getAppLanguageUseCase, setAppLanguageUseCase)
-
-        advanceUntilIdle()
-        viewModel.onLanguageClick(selectedLang)
-        advanceUntilIdle()
-
-        assertEquals(selectedLang, viewModel.uiState.value.appLanguage)
-        coVerify(exactly = 1) { setAppLanguageUseCase(any()) }
     }
 
     @Test
-    fun `observeAppLanguage() updates state correctly`() = runTest {
-        val fakeDataStoreFlow = MutableStateFlow(AppLanguage.SPANISH)
-        val expectedState = LanguageUiState().copy(
-            appLanguage = AppLanguageUi.SPANISH,
-            screenState = LanguageScreenState.Loaded)
-        coEvery { getAppLanguageUseCase() } returns fakeDataStoreFlow
+    fun `uiState emits Loaded when language is emitted`() = runTest {
+        val domainLang = AppLanguage.ENGLISH
+        every { getAppLanguageUseCase() } returns flowOf(domainLang)
 
-        viewModel = LanguageViewModel(getAppLanguageUseCase, setAppLanguageUseCase)
+        viewModel = LanguageViewModel(
+            getAppLanguageUseCase,
+            setAppLanguageUseCase
+        )
+
+        viewModel.uiState.test {
+            val initial = awaitItem()
+            assertEquals(LanguageScreenState.Loading, initial.screenState)
+
+            val loaded = awaitItem()
+            assertEquals(LanguageScreenState.Loaded, loaded.screenState)
+            assertEquals(domainLang.toUi(), loaded.appLanguage)
+
+            expectNoEvents()
+        }
+    }
+
+    @Test
+    fun `uiState does not emit duplicate states for same language`() = runTest {
+        val lang = AppLanguage.RUSSIAN
+
+        every { getAppLanguageUseCase() } returns flow {
+            emit(lang)
+            emit(lang)
+        }
+
+        viewModel = LanguageViewModel(
+            getAppLanguageUseCase,
+            setAppLanguageUseCase
+        )
+
+        viewModel.uiState.test {
+            awaitItem()
+            awaitItem()
+
+            expectNoEvents()
+        }
+    }
+
+    @Test
+    fun `onLanguageClick calls setAppLanguageUseCase`() = runTest {
+        every { getAppLanguageUseCase() } returns emptyFlow()
+        coEvery { setAppLanguageUseCase(any()) } just Runs
+
+        viewModel = LanguageViewModel(
+            getAppLanguageUseCase,
+            setAppLanguageUseCase
+        )
+
+        val uiLang = AppLanguageUi.ENGLISH
+
+        viewModel.onLanguageClick(uiLang)
+
         advanceUntilIdle()
 
-        assertEquals(expectedState.appLanguage, viewModel.uiState.value.appLanguage)
-        assertEquals(expectedState.screenState, viewModel.uiState.value.screenState)
+        coVerify(exactly = 1) {
+            setAppLanguageUseCase(uiLang.toDomain())
+        }
     }
+
+
+
 }
