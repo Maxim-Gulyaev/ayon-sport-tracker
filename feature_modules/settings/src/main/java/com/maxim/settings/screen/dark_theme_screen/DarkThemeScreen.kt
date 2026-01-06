@@ -11,70 +11,77 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import com.maxim.model.DarkThemeConfig
 import com.maxim.settings.R
 import com.maxim.settings.screen.component.SettingsCheckableItem
 import com.maxim.settings.screen.component.SettingsTopAppBar
 import com.maxim.settings.utils.displayConfigNameRes
+import com.maxim.ui.component.LoadingScreen
 
 @Composable
-fun DarkThemeScreen(
+internal fun DarkThemeScreen(
     viewModel: DarkThemeViewModel,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val uiState by viewModel.uiState.collectAsState(DarkThemeUiState())
 
-    when (uiState.loadingStatus) {
-        DarkThemeLoadingStatus.Loaded -> {
-            DarkThemeScreenContent(
-                uiState = uiState,
-                onBackClick = onBackClick,
-                opOptionClick = { config -> viewModel.onOptionClicked(config) },
-            )
-        }
-
-        DarkThemeLoadingStatus.Loading -> {}
-    }
+    DarkThemeScreenContent(
+        uiState = uiState,
+        onBackClick = onBackClick,
+        onOptionClick = { config -> viewModel.onOptionClicked(config) },
+    )
 }
 
 @Composable
-private fun DarkThemeScreenContent(
+internal fun DarkThemeScreenContent(
     uiState: DarkThemeUiState,
     onBackClick: () -> Unit,
-    opOptionClick: (DarkThemeConfig) -> Unit,
+    onOptionClick: (DarkThemeConfig) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Scaffold(
-        topBar = {
-            SettingsTopAppBar(
-                titleRes = R.string.dark_mode_settings,
-                onBackClick = onBackClick,
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Color.Transparent,
-                ),
-            )
-        }
-    ) { paddingValues ->
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(paddingValues)
-                .padding(horizontal = 16.dp, vertical = 20.dp),
-        ) {
-            with (uiState) {
-                items(
-                    items = configs,
-                    key = { it.ordinal }
-                ) { item ->
-                    SettingsCheckableItem(
-                        displayNameRes = item.displayConfigNameRes(),
-                        isSelected = currentConfig == item,
-                        onClick = { opOptionClick(item) }
+    when (uiState.loadingStatus) {
+
+        DarkThemeLoadingStatus.Loaded -> {
+            Scaffold(
+                modifier = Modifier.testTag("darkThemeScreenContent"),
+                topBar = {
+                    SettingsTopAppBar(
+                        titleRes = R.string.dark_mode_settings,
+                        onBackClick = onBackClick,
+                        colors = TopAppBarDefaults.topAppBarColors(
+                            containerColor = Color.Transparent,
+                        ),
                     )
                 }
+            ) { paddingValues ->
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(paddingValues)
+                        .padding(horizontal = 16.dp, vertical = 20.dp),
+                ) {
+                    with (uiState) {
+                        items(
+                            items = configs,
+                            key = { it.ordinal }
+                        ) { config ->
+                            SettingsCheckableItem(
+                                displayNameRes = config.displayConfigNameRes(),
+                                isSelected = currentConfig == config,
+                                testTag = "settingsCheckableItem" + config.name,
+                                onClick = { onOptionClick(config) }
+                            )
+                        }
+                    }
+                }
             }
+        }
+
+        DarkThemeLoadingStatus.Loading -> {
+            LoadingScreen()
         }
     }
 }

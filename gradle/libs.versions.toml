@@ -25,6 +25,8 @@ protobuf = "4.29.2"
 protobufJavalite = "4.29.2"
 protobufPlugin = "0.9.4"
 turbine = "1.2.1"
+uiTestJunit4 = "1.10.0"
+activityKtx = "1.12.2"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -56,6 +58,8 @@ mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 protobuf-javalite = { module = "com.google.protobuf:protobuf-javalite", version.ref = "protobuf" }
 protobuf-protoc = { group = "com.google.protobuf", name = "protoc", version.ref = "protobuf" }
 turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
+androidx-compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4", version.ref = "uiTestJunit4" }
+androidx-activity-ktx = { group = "androidx.activity", name = "activity-ktx", version.ref = "activityKtx" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

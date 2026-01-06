@@ -82,6 +82,7 @@ private fun LanguageScreenContent(
                         SettingsCheckableItem(
                             displayNameRes = item.displayLangNameRes(),
                             isSelected = appLanguage == item,
+                            testTag = item.name,
                             onClick = { onLanguageItemClick(item) }
                         )
                         if (index < appLanguages.lastIndex) {

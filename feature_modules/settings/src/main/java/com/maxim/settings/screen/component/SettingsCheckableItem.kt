@@ -1,15 +1,16 @@
 package com.maxim.settings.screen.component
 
 import androidx.annotation.StringRes
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.selection.selectable
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.maxim.ui.component.AyonHorizontalSpacer
@@ -20,6 +21,7 @@ import com.maxim.ui.util.NoRippleInteractionSource
 internal fun SettingsCheckableItem(
     @StringRes displayNameRes: Int,
     isSelected: Boolean,
+    testTag: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -28,11 +30,13 @@ internal fun SettingsCheckableItem(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 12.dp, vertical = 10.dp)
-            .clickable(
+            .selectable(
+                selected = isSelected,
+                onClick = onClick,
                 indication = null,
                 interactionSource = NoRippleInteractionSource,
-                onClick = onClick,
             )
+            .testTag(testTag),
     ) {
         RadioButton(
             selected = isSelected,
