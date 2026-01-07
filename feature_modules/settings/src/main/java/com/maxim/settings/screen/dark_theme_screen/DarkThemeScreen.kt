@@ -18,6 +18,7 @@ import com.maxim.settings.R
 import com.maxim.settings.screen.component.SettingsCheckableItem
 import com.maxim.settings.screen.component.SettingsTopAppBar
 import com.maxim.settings.utils.displayConfigNameRes
+import com.maxim.testing.test_tag.SettingsTestTag
 import com.maxim.ui.component.LoadingScreen
 
 @Composable
@@ -46,7 +47,7 @@ internal fun DarkThemeScreenContent(
 
         DarkThemeLoadingStatus.Loaded -> {
             Scaffold(
-                modifier = Modifier.testTag("darkThemeScreenContent"),
+                modifier = Modifier.testTag(SettingsTestTag.DARK_THEME_SCREEN_CONTENT),
                 topBar = {
                     SettingsTopAppBar(
                         titleRes = R.string.dark_mode_settings,
@@ -71,7 +72,7 @@ internal fun DarkThemeScreenContent(
                             SettingsCheckableItem(
                                 displayNameRes = config.displayConfigNameRes(),
                                 isSelected = currentConfig == config,
-                                testTag = "settingsCheckableItem" + config.name,
+                                testTag = SettingsTestTag.SETTINGS_CHECKABLE_ITEM + config.name,
                                 onClick = { onOptionClick(config) }
                             )
                         }
