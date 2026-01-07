@@ -29,6 +29,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.maxim.run.R
+import com.maxim.run.utils.formatElapsedTime
 import com.maxim.testing.test_tags.RunScreenTestTag
 import com.maxim.ui.component.SingleClickButton
 import com.maxim.ui.theme.AyonTheme
@@ -40,8 +41,8 @@ import java.util.Locale
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
-private const val FORMAT_HOUR_MIN_SEC = "%02d:%02d:%02d"
-private const val FORMAT_MIN_SEC = "%02d:%02d"
+/*private const val FORMAT_HOUR_MIN_SEC = "%02d:%02d:%02d"
+private const val FORMAT_MIN_SEC = "%02d:%02d"*/
 
 @Composable
 internal fun RunScreen(
@@ -94,7 +95,7 @@ internal fun RunScreenContainer(
 
             Spacer(modifier = modifier.weight(0.4f))
 
-            StopwatchBlock(uiState.jogDuration.inWholeSeconds)
+            StopwatchBlock(uiState.jogDuration.inWholeSeconds.formatElapsedTime())
 
             Spacer(modifier = modifier.weight(0.9f))
 
@@ -111,33 +112,12 @@ internal fun RunScreenContainer(
 
 @Composable
 private fun StopwatchBlock(
-    elapsedSeconds: Long,
+    stopwatchText: String,
     modifier: Modifier = Modifier,
 ) {
-    val hours = elapsedSeconds / 3600
-    val minutes = (elapsedSeconds % 3600) / 60
-    val seconds = elapsedSeconds % 60
-
-    val durationString = if (hours > 0) {
-        String.format(
-            Locale.US,
-            FORMAT_HOUR_MIN_SEC,
-            hours,
-            minutes,
-            seconds
-        )
-    } else {
-        String.format(
-            Locale.US,
-            FORMAT_MIN_SEC,
-            minutes,
-            seconds
-        )
-    }
-
     Text(
         modifier = Modifier.testTag(RunScreenTestTag.STOPWATCH_TEXT),
-        text = durationString,
+        text = stopwatchText,
         fontSize = 60.sp,
         color = MaterialTheme.colorScheme.primary,
     )
