@@ -118,4 +118,27 @@ class LanguageScreenTest {
 
         assertEquals(true, isViewModelCalled)
     }
+
+    @Test
+    fun languageScreen_back_click_should_call_callback() {
+        var isCallbackCalled = false
+        val uiState = LanguageUiState()
+            .copy(screenState = LanguageScreenState.Loaded)
+
+        rule.setContent {
+            LanguageScreenContent(
+                uiState = uiState,
+                onLanguageItemClick = {},
+                onBackClick = {
+                    isCallbackCalled = true
+                },
+            )
+        }
+
+        rule
+            .onNodeWithTag(SettingsTestTag.BACK_BUTTON)
+            .performClick()
+
+        assertEquals(true, isCallbackCalled)
+    }
 }

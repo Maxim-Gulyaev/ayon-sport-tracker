@@ -120,4 +120,27 @@ class DarkThemeScreenTest {
             .performClick()
             .assertIsSelected()
     }
+
+    @Test
+    fun darkThemeScreen_backClick_should_call_callback() {
+        var isCallbackCalled = false
+        val uiState = DarkThemeUiState()
+            .copy(loadingStatus = DarkThemeLoadingStatus.Loaded)
+
+        rule.setContent {
+            DarkThemeScreenContent(
+                uiState = uiState,
+                onBackClick = {
+                    isCallbackCalled = true
+                },
+                onOptionClick = {},
+            )
+        }
+
+        rule
+            .onNodeWithTag(SettingsTestTag.BACK_BUTTON)
+            .performClick()
+
+        assertEquals(true, isCallbackCalled)
+    }
 }
