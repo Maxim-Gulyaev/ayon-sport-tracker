@@ -5,13 +5,6 @@ import kotlin.time.Duration
 
 @Immutable
 data class RunUiState(
-    val jogDuration: Duration,
-    val isStopwatchRunning: Boolean,
-) {
-    companion object {
-        fun initial() = RunUiState(
-            jogDuration = Duration.ZERO,
-            isStopwatchRunning = false,
-        )
-    }
-}
+    val jogDuration: Duration = Duration.ZERO,
+    val isStopwatchRunning: Boolean = false,
+)

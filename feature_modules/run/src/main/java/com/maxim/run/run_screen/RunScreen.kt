@@ -86,7 +86,7 @@ private fun RunScreenContainer(
                 onSaveClick = onSaveClick,
                 onResetClick = onResetClick,
                 jogDuration = uiState.jogDuration,
-                isElapsedTimeInitial = uiState.jogDuration == RunUiState.initial().jogDuration,
+                isElapsedTimeInitial = uiState.jogDuration == RunUiState().jogDuration,
                 isStopwatchRunning = uiState.isStopwatchRunning,
             )
 
@@ -98,7 +98,7 @@ private fun RunScreenContainer(
 
             StartButtonBlock(
                 isStopwatchRunning = uiState.isStopwatchRunning,
-                isElapsedTimeInitial = uiState.jogDuration == RunUiState.initial().jogDuration,
+                isElapsedTimeInitial = uiState.jogDuration == RunUiState().jogDuration,
                 onStartClick = onStartClick,
             )
 

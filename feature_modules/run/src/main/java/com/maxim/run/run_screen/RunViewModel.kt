@@ -21,7 +21,7 @@ class RunViewModel @Inject constructor(
     private val saveJogUseCase: SaveJogUseCase,
 ): ViewModel() {
 
-    private val _uiState: MutableStateFlow<RunUiState> = MutableStateFlow(RunUiState.initial())
+    private val _uiState: MutableStateFlow<RunUiState> = MutableStateFlow(RunUiState())
     val uiState: StateFlow<RunUiState> = _uiState.asStateFlow()
 
     private var stopwatchJob: Job? = null
@@ -60,7 +60,7 @@ class RunViewModel @Inject constructor(
         stopwatchJob?.cancel()
 
         _uiState.update {
-            RunUiState.initial()
+            RunUiState()
         }
     }
 
