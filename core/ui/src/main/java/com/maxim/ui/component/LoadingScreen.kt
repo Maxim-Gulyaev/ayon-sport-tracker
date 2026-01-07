@@ -10,7 +10,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
-import com.maxim.testing.test_tag.CommonTestTag
+import com.maxim.testing.test_tags.CommonTestTag
 import com.maxim.ui.util.AdaptivePreviewDark
 
 @Composable

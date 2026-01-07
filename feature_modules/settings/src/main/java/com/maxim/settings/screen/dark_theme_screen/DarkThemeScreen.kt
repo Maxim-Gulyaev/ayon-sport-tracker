@@ -18,7 +18,7 @@ import com.maxim.settings.R
 import com.maxim.settings.screen.component.SettingsCheckableItem
 import com.maxim.settings.screen.component.SettingsTopAppBar
 import com.maxim.settings.utils.displayConfigNameRes
-import com.maxim.testing.test_tag.SettingsTestTag
+import com.maxim.testing.test_tags.SettingsTestTag
 import com.maxim.ui.component.LoadingScreen
 
 @Composable

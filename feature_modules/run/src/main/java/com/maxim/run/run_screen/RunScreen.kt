@@ -22,12 +22,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.maxim.run.R
+import com.maxim.testing.test_tags.RunScreenTestTag
 import com.maxim.ui.component.SingleClickButton
 import com.maxim.ui.theme.AyonTheme
 import com.maxim.ui.theme.AyonTypography
@@ -42,7 +44,7 @@ private const val FORMAT_HOUR_MIN_SEC = "%02d:%02d:%02d"
 private const val FORMAT_MIN_SEC = "%02d:%02d"
 
 @Composable
-fun RunScreen(
+internal fun RunScreen(
     viewModel: RunViewModel,
     quitRunScreen: () -> Unit,
 ) {
@@ -64,7 +66,7 @@ fun RunScreen(
 }
 
 @Composable
-private fun RunScreenContainer(
+internal fun RunScreenContainer(
     uiState: RunUiState,
     onStartClick: () -> Unit,
     onResetClick: () -> Unit,
@@ -134,6 +136,7 @@ private fun StopwatchBlock(
     }
 
     Text(
+        modifier = Modifier.testTag(RunScreenTestTag.STOPWATCH_TEXT),
         text = durationString,
         fontSize = 60.sp,
         color = MaterialTheme.colorScheme.primary,
@@ -160,7 +163,9 @@ private fun SaveButtonBlock(
         horizontalArrangement = Arrangement.SpaceEvenly,
     ) {
         SingleClickButton(
-            modifier = Modifier.width(120.dp),
+            modifier = Modifier
+                .width(120.dp)
+                .testTag(RunScreenTestTag.SAVE_BUTTON),
             onClick = onSaveClick,
             enabled = saveButtonEnabled,
         ) {
@@ -174,7 +179,9 @@ private fun SaveButtonBlock(
         }
 
         Button(
-            modifier = Modifier.width(120.dp),
+            modifier = Modifier
+                .width(120.dp)
+                .testTag(RunScreenTestTag.RESET_BUTTON),
             enabled = !isElapsedTimeInitial,
             onClick = onResetClick,
         ) {
@@ -215,7 +222,9 @@ private fun StartButtonBlock(
         horizontalArrangement = Arrangement.Center,
     ) {
         Button(
-            modifier = Modifier.sizeIn(minWidth = 160.dp, minHeight = 160.dp),
+            modifier = Modifier
+                .sizeIn(minWidth = 160.dp, minHeight = 160.dp)
+                .testTag(RunScreenTestTag.START_BUTTON),
             onClick = onStartClick,
             shape = CircleShape,
             colors = ButtonDefaults.buttonColors(

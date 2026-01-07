@@ -7,8 +7,8 @@ import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import com.maxim.settings.model.AppLanguageUi
-import com.maxim.testing.test_tag.CommonTestTag
-import com.maxim.testing.test_tag.SettingsTestTag
+import com.maxim.testing.test_tags.CommonTestTag
+import com.maxim.testing.test_tags.SettingsTestTag
 import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
