@@ -21,6 +21,8 @@ class RunViewModel @Inject constructor(
     private val saveJogUseCase: SaveJogUseCase,
 ): ViewModel() {
 
+    // todo перенести логику секундомера в сервис
+
     private val _uiState: MutableStateFlow<RunUiState> = MutableStateFlow(RunUiState())
     val uiState: StateFlow<RunUiState> = _uiState.asStateFlow()
 
