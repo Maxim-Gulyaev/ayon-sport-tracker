@@ -15,6 +15,7 @@
 /.idea/inspectionProfiles/Project_Default.xml
 /.idea/deploymentTargetSelector.xml
 /.idea/androidTestResultsUserPreferences.xml
+/.idea/studiobot.xml
 .DS_Store
 /build
 /captures
